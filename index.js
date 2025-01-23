@@ -1,27 +1,43 @@
-import sum from "./module/math.js"
-import fs from "node:fs"
-// import dotenv from "dotenv"
-import "./mA.js"
-import "./mB.js"
+import Logger from "./logger/logger.js";
 
-const p = new Promise(( res, rej) => {
-    setTimeout(() => {
-        res(12)
-    }, 2000)
+const logger  = new Logger()
+
+logger.info("Info message")
+logger.warning("Warning message")
+logger.error("Error message")
+
+console.log({
+    APP_ENV: process.env['APP_ENV'],
+    DB_PASS: process.env['DB_PASS'],
+    PID: process.pid
 })
 
-// console.log(1);
+const p = process.env
 
-// ( async () => {
-    // const promiseResponse = await p
-    // p.then(promiseResponse => {
-    //     console.log({ promiseResponse })
-    // })
 
-    // console.log({ promiseResponse })
-// })()
+setInterval(() => {
+    const timestemp = new Date().toISOString()
 
-// console.log(2)
+    logger.info(`${timestemp}`)
+}, 10_000)
 
-// const res = sum(5, 4)
-// console.log(res);
+// process.on("SIGINT", () => { // CTR + C
+//     console.log("SIGINT terminate ....")
+
+//     setTimeout(() => {
+//         process.exit(1)
+//     }, 2_000)
+//     // 
+// })
+
+// process.on("SIGTERM", () => {
+//     console.log("SIGTERM terminate ....")
+
+//     // db.close()
+
+//     setTimeout(() => {
+//         process.exit(1)
+//     }, 2_000)
+// })
+
+// SIGTKILL
