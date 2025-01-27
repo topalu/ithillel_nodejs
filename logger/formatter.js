@@ -4,6 +4,12 @@ function formatMessage(level, msg) {
 
     const timestemp = new Date().toISOString()
 
+    // if (msg instanceof Error) {
+    //     msg = msg.message
+    //     name = msg.name
+    // }
+
+
     switch(level) {
         case 'info':
             return chalk.blue(`[${timestemp}], INFO: ${msg}`)
