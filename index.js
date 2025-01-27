@@ -41,25 +41,14 @@ setInterval(() => {
 //     }, 2_000)
 // })
 
-// SIGTKILL
-
 process.on('uncaughtException', (err) => {
     console.log('uncaughted Exception', err.message)
 
     process.exit(1)
 })
 
-try {
-    throw new Error("Some error")
-} catch (err) {
-    logger.error(err.message)
-}
-
 process.on('unhandledRejection', (err) => {
     console.log('unhandled Rejection', err.message)
 
     process.exit(1)
 })
-
-
-// Promise.reject(new Error("Some reject error"))
