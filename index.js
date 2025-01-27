@@ -10,7 +10,7 @@ logger.error(new Error(''))
 console.log({
     APP_ENV: process.env['APP_ENV'],
     DB_PASS: process.env['DB_PASS'],
-    PID: process.pid // required row
+    // PID: process.pid // required row
 })
 
 const p = process.env
