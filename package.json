@@ -11,6 +11,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "@faker-js/faker": "^9.4.0",
     "dotenv": "^16.4.7"
   },
   "devDependencies": {
