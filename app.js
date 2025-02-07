@@ -54,5 +54,5 @@ const server = http.createServer((request, response) => {
 
 
 server.listen(APPP_PORT, () => {
-    console.log("Server listen 3000 port")
+console.log(`Server is listening on port ${APPP_PORT}`)
 })
