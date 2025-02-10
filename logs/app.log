@@ -55,3 +55,6 @@
 [31m[2025-01-23T18:56:16.890Z], ERROR: Error message[39m 
 [34m[2025-01-23T18:56:26.894Z], INFO: 2025-01-23T18:56:26.894Z[39m 
 [34m[2025-01-23T18:56:36.895Z], INFO: 2025-01-23T18:56:36.895Z[39m 
+[34m[2025-02-10T18:39:36.599Z], INFO: Server is listening on port 3000[39m 
+[34m[2025-02-10T18:39:48.877Z], INFO: Server is listening on port 3000[39m 
+[34m[2025-02-10T18:40:04.724Z], INFO: Server is listening on port 3000[39m 

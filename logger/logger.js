@@ -22,13 +22,13 @@ class Logger {
         const formattedMsg = formatMessage(level, msg)
 
         // if(process.env.APP_ENV === 'local') {
-        //     console.log(formattedMsg)
+            console.log(formattedMsg)
         // } else {
-            fs.appendFile(this.logPath, `${formattedMsg} \n`, (err) => {
-                if (err) {
-                    console.error("Error while try to put data to file", err.message)
-                }
-            })
+        //     fs.appendFile(this.logPath, `${formattedMsg} \n`, (err) => {
+        //         if (err) {
+        //             console.error("Error while try to put data to file", err.message)
+        //         }
+        //     })
         // }
     }
 
@@ -43,6 +43,8 @@ class Logger {
 
 
     error(msg) {
+        msg = msg instanceof Error ? msg.message : msg
+
         this.__log(levels.ERROR, msg)
     }
 }
