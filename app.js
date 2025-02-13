@@ -7,6 +7,7 @@ import path from "node:path"
 import { fileURLToPath } from "node:url"
 import { hostname } from "node:os"
 import Logger from "./logger/logger.js"
+import {getUser} from "./src/services/user.service.js"
 
 const __filname = fileURLToPath(import.meta.url)
 const __dirname = path.dirname(__filname)
@@ -28,72 +29,119 @@ const server = http.createServer()
 
 server.on("request", (req, res) => {
 
+    if (String(req.url).startsWith('/upload')) {
 
-    // const options = {
-    //     hostname: 'jsonplaceholder.typicode.com',
-    //     // hostname: 'localhost',
-    //     path: request.path,
-    //     method: request.method,
-    //     headers: request.headers,
-    //     port: 3002
-    // }
+        const contentType = req.headers['content-type']
 
-    // const proxyReq = http.request(options, (proxyRes) => {
-    //     response.writeHead(proxyRes.statusCode, proxyRes.headers)
+        const boundary = `--${contentType.split('boundary=')[1]}`
 
-    //     proxyRes.pipe(response)
-    // })
+        console.log({ contentType, boundary })
 
-    // request.pipe(proxyReq)
+        let body = Buffer.alloc(0)
 
-    // proxyReq.on("error", (err) => {
-    //     logger.error(err)
-    //     response.end("Proxy request failed", err.message)
-    // })
-
-    console.log("URL", req.url, "Method", req.method)
-    // const writeStream = fs.createWriteStream("http-data.txt")
-    // request.pipe(writeStream)
-
-    if (req.method === "GET" && /^\/static/.test(req.url)) {
-
-        res.writeHead(500, {
-            "content-type": "text/html"
+        req.on("data", chunk => {
+            body = Buffer.concat([body, chunk])
         })
 
-        // Math.random()
+        req.on("end", {
+            
+        })
 
-        const filePath = `${global.__dirname}${req.url}`
 
-        const metaData = fs.lstatSync(filePath).isDirectory()
 
-        if (fs.lstatSync(filePath).isDirectory()) {
-            throw new Error("403 Forbidden action")
-        }
-
-        if (fs.lstatSync(filePath).isFile()) {
-            const fileData = fs.readFileSync(filePath)
-
-            res.end(fileData)
-        }
-        
-
-        console.log({ metaData })
-
+        res.writeHead(200, {
+            "content-type": "text/plain"
+        })
+        res.end("File uploaded")
+        return 
     }
 
-    // console.log("stream ID", stream.id)
+    if (String(req.url).startsWith('/static')) {
+        let fileData = staticRoutes(req)
 
-    // stream.respond({
-    //     ":status": 200,
-    //     'content-type': "application/json"
-    // })
+        if (fileData) {
+            res.writeHead(200, {
+                "content-type": "text/html"
+            })
+    
+            res.end(fileData)
+            return
+        }
+    }
 
-    // stream.end(JSON.stringify({
-    //     value: Math.random()
-    // }))
+    if (String(req.url).startsWith('/api/v1/')) {
+
+        const routes = apiRoutes()
+
+        for(const route of routes) {
+            const match = String(req.url).match(route.pattern)
+
+            if (match) {
+                const data = route.handler(match[1])
+
+                res.writeHead(200, {
+                    "content-type": "application/json"
+                })
+
+                res.end(JSON.stringify(data))
+
+                return
+            }
+        }
+    }
+
+    res.writeHead(404, {
+        "content-type": "text/html"
+    })
+
+    res.end(getNotFoundPage())
 })
 
+function apiRoutes() {
+    return [
+        { pattern: /^\/api\/v1\/users\/(\d+)$/,  handler: async (id) => getUser(id) },
+        { pattern: /^\/api\/v1\/posts\/(\d+)$/, handler: (id) =>  getPost(id)}
+    ]
+}
+
+// function getUser(id) {
+//     console.log({id})
+//     return {
+//         firstName: "John",
+//         age: 30
+//     }
+// }
+
+function getPost(id) {
+    return {
+        title: "Nodejs",
+    }
+}
+
+
+function staticRoutes(req) {
+    const filePath = `${global.__dirname}${req.url}`
+
+    if (!fs.existsSync(filePath)) {
+        return false
+    }
+
+    if (fs.lstatSync(filePath).isDirectory()) {
+        throw new Error("403 Forbidden action")
+    }
+
+    if (fs.lstatSync(filePath).isFile()) {
+        return fs.readFileSync(filePath)
+    }
+
+    return false
+}
+
+function getNotFoundPage() {
+    const filePath = `${global.__dirname}/static/404.html`
+
+    return fs.readFileSync(filePath)
+}
 
 server.listen(APPP_PORT, () => {
     logger.info(`HTTP Server is listening on port ${APPP_PORT}`)
