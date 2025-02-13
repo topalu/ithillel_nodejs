@@ -8,6 +8,7 @@ import { fileURLToPath } from "node:url"
 import { hostname } from "node:os"
 import Logger from "./logger/logger.js"
 import {getUser} from "./src/services/user.service.js"
+import express from "express"
 
 const __filname = fileURLToPath(import.meta.url)
 const __dirname = path.dirname(__filname)
@@ -19,12 +20,7 @@ global.__dirname = __dirname
 
 const APPP_PORT = 3000
 
-// const options = {
-//     key: fs.readFileSync('server.key'),  // Завантажуємо приватний ключ
-//     cert: fs.readFileSync('server.cert') // Завантажуємо сертифікат
-// };
 
-// const server = http2.createSecureServer(options)
 const server = http.createServer()
 
 server.on("request", (req, res) => {
@@ -43,11 +39,39 @@ server.on("request", (req, res) => {
             body = Buffer.concat([body, chunk])
         })
 
-        req.on("end", {
-            
+        req.on("end", () => {
+            const parts = body.toString('utf8')
+            .split(boundary)
+            .filter(part => part.trim() && part !== "--")
+
+            let fileName = ''
+            let fileData = Buffer.alloc(0)
+            const formFields = {}
+
+            parts.forEach(part => {
+
+                const [headers, contant] = part.split('\r\n\r\n')
+
+                if (headers.includes("filename=")) {
+                    fileName = headers.match(/filename="(.+?)"/)[1]
+                    fileData = Buffer.from(String(contant).trim(), 'binary')
+                } else {
+                    const nameMatch = headers.match(/name="(.+?)"/)
+
+                    if (nameMatch) {
+                        formFields[nameMatch[1]] = String(contant).trim()
+                    }
+                }
+            })
+
+            if (fileName) {
+                const filePath = path.join(__dirname, 'src', 'uploads', fileName)
+                fs.writeFileSync(filePath, fileData)
+            }
+
+            console.log({ formFields })
+
         })
-
-
 
         res.writeHead(200, {
             "content-type": "text/plain"
