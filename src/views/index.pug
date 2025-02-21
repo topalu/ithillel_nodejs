@@ -1,0 +1,11 @@
+extends layout
+
+block content
+    h1= title
+    p= "P text"
+    if users.length > 10
+        ul
+            each user in users
+                li name: #{user.name}, #{user.age} ages
+    else
+        p No users
