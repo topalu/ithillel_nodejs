@@ -1,6 +1,9 @@
 extends layout
 
+
+
 block content
+    -var a = "A Value"
     h1= title
     p= "P text"
     if users.length > 10
@@ -9,3 +12,9 @@ block content
                 li name: #{user.name}, #{user.age} ages
     else
         p No users
+
+    p #{a}
+
+    ul
+        - for(var i=0; i<=5; i++)
+            li Item #{i}

@@ -3,10 +3,7 @@ import { fileURLToPath } from "node:url"
 import Logger from "./logger/logger.js"
 import express from "express"
 import {router} from "./src/routes/index.js"
-import {userRouter} from "./src/routes/user.js"
-import {testMiddleware} from "./src/middleware/test.js"
 import {restriction} from "./src/middleware/request-restriction.js"
-import {viewRouter} from "./src/routes/view.js"
 
 const __filname = fileURLToPath(import.meta.url)
 const __dirname = path.dirname(__filname)
@@ -28,8 +25,6 @@ app.set("views", path.join(__dirname, "src/views"))
 
 // app.use(restriction)
 app.use("/", router)
-app.use("/user", userRouter)
-app.use("/view", viewRouter)
 
 app.use((req, res, next) => {
     res.status(404).send("Not Found")
