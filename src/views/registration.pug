@@ -1,0 +1,16 @@
+extends layout
+
+block content
+    h1 Registration Page
+    p Будь ласка, заповніть форму для реєстрації.
+    form(action="/auth/register" method="POST")
+        .mb-3
+            label.form-label(for="username") Username
+            input.form-control(type="text" name="username" id="username" placeholder="Введіть ваше ім'я")
+        .mb-3
+            label.form-label(for="email") Email address
+            input.form-control(type="email" name="email" id="email" placeholder="example@email.com")
+        .mb-3
+            label.form-label(for="password") Password
+            input.form-control(type="password" name="password" id="password" placeholder="Введіть пароль")
+        button.btn.btn-primary(type="submit") Submit

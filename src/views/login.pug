@@ -1,0 +1,13 @@
+extends layout
+
+block content
+    h1 Login Page
+    p Увійдіть до свого облікового запису.
+    form(action="/auth/login" method="POST")
+        .mb-3
+            label.form-label(for="email") Email address
+            input.form-control(type="email" name="email" id="email" placeholder="example@email.com")
+        .mb-3
+            label.form-label(for="password") Password
+            input.form-control(type="password" name="password" id="password" placeholder="Введіть пароль")
+        button.btn.btn-primary(type="submit") Login

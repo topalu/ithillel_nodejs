@@ -1,0 +1,18 @@
+nav.navbar.navbar-expand-lg.navbar-light.bg-light
+    .container-fluid
+        a.navbar-brand(href="/") MyApp
+        button.navbar-toggler(type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation")
+            span.navbar-toggler-icon
+        .collapse.navbar-collapse#navbarNav
+            ul.navbar-nav
+                li.nav-item
+                    a.nav-link(href="/auth") Registration
+                li.nav-item
+                    a.nav-link(href="/auth/login") Login
+                li.nav-item
+                    a.nav-link(href="/auth/account") Account
+
+if error
+    .alert.alert-danger(role="alert") 
+        strong Помилка: 
+        | #{error}
