@@ -1,13 +1,14 @@
 import {Router} from "express"
-import {getUsers, createUser} from "../controllers/user.controller.js"
+import {getUsers, createUser, getUser} from "../controllers/user.controller.js"
 import { createUserValidator } from "../validators/user.validator.js"
 import { logMiddleware } from "../middleware/logs.js"
 
 export const userRouter = Router()
 
 userRouter.get("/", getUsers)
+userRouter.get("/:id", getUser)
 
-userRouter.post("/", logMiddleware, createUserValidator, createUser)
+userRouter.post("/", logMiddleware, createUser)
 
 
 userRouter.put("/:userId", (req, res) => {

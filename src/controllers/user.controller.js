@@ -1,15 +1,23 @@
+import {getUsers as getUsersService, postUser, getUser as getUserService} from "../services/user.service.js"
 
-import {getUsers as getUsersService, postUser} from "../services/user.service.js"
+export async function getUser(req, res) {
 
-export function getUsers(req, res) {
     return res.json({
-        list: getUsersService()
+        item: await getUserService(req.params['id'])
     })
 }
 
-export function createUser(req, res) {
-    const {user } = req.body
-    postUser(user)
+export async function getUsers(req, res) {
+
+    return res.json({
+        list: await getUsersService()
+    })
+}
+
+export async function createUser(req, res) {
+    const user = req.body
+
+    await postUser(user)
 
     return res.json({ "status": "OK" })
 }
