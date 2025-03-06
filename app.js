@@ -5,7 +5,8 @@ import express from "express"
 import {router} from "./src/routes/index.js"
 import {restriction} from "./src/middleware/request-restriction.js"
 import session from "express-session"
-import {getInstance} from "./src/mongodb/connection.js"
+// import {getInstance} from "./src/mongodb/connection.js"
+import sequelize from "./src/models/index.js"
 
 const __filname = fileURLToPath(import.meta.url)
 const __dirname = path.dirname(__filname)
@@ -31,7 +32,7 @@ app.use(session({
     cookie: { secure: false }
   }))
 
-await getInstance()
+// await getInstance()
 
 // app.use(restriction)
 app.use("/", router)
