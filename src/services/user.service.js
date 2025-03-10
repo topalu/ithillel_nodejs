@@ -1,75 +1,23 @@
 import crypto from "crypto"
-import {getInstance} from "../../src/mongodb/connection.js"
-import { ObjectId } from "mongodb"
+// import {getInstance} from "../../src/mongodb/connection.js"
+// import { ObjectId } from "mongodb"
 import { faker } from '@faker-js/faker';
+import User from "../models/user.model.js"
 
 
 const users = []
 
 export async function getUsers() {
-    const db = await getInstance()
 
-    // const fn = () => faker.helpers.arrayElement(["js", "php", "nodejs", "c#", "c++", "pyton", "go", "swift"])
-    
-    // const getSkills = () => {
-    //     return [...new Set([...Array(3)].map(fn))]
-    // }
+    // await User.create({
+    //     username: "Bob",
+    //     email: "bob@email.com"
+    // })
 
-    // const users = Array.from({length: 100}, () => ({
-    //     name: faker.person.fullName(),
-    //     emit: faker.internet.email(),
-    //     password: faker.internet.password(),
-    //     birthday: faker.date.between({ from: "1980-01-01", to: "2000-01-01"}),
-    //     sex: faker.person.sex(),
-    //     ages: faker.number.int({min: 18, max: 50}),
-    //     skills: getSkills()
-    // }))   
+    const users = await User.findAll()
 
-    // await db.collection('users').insertMany(users)
 
-    // const cursor = db.collection('users')
-    //     .find({ ages: { $gt: 30 } })
-    //     .skip(100)
-    //     .limit(20)
-    //     .sort({ ages: -1 })
-
-    // const users = []
-
-    // for await (const user of cursor) {
-    //     users.push(user)
-    // }
-    // console.log({ users: users.length })
-
-    // const response = db.collection('users').aggregate([
-    //     { $group: { _id: "$sex", avarageAge: { $avg: "$ages" } } }
-    // ]).toArray()
-
-    // const response = db.collection('users').aggregate([
-    //     { $unwind: "$skills" },
-    //     { $group: { _id: "$skills", count: { $sum: 1 } } },
-    //     { $sort: {count: -1 } },
-    //     // { $limit: 5 }
-    // ]).toArray()
-
-    const response = db.collection('users').aggregate([
-        {
-            $project: {
-                emailDomain: { $arrayElemAt: [ {$split: [ "$emit", "@"]}, 1 ] }
-            },
-        },
-        {
-            $group: {
-                _id: "$emailDomain", count: {$sum: 1}
-            }
-        }
-
-        // { $unwind: "$skills" },
-        // { $group: { _id: "$skills", count: { $sum: 1 } } },
-        // { $sort: {count: -1 } },
-        // { $limit: 5 }
-    ]).toArray()
-
-    return response
+    return users
 }
 
 export function idExists(id) {

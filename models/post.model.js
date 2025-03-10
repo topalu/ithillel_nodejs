@@ -18,24 +18,17 @@ Post.init({
     text: {
         type: DataTypes.TEXT,
         allowNull: true
-    },
-    userId: {
-        type: DataTypes.INTEGER,
-        references: {
-            model: "users",
-            key: "id"
-        }
     }
 }, {
     sequelize,
     modelName: "Post",
     tableName: "posts",
     timestamps: true,
-    paranoid: false
+    createdAt: "createdat",
+    updatedAt: "updatedat",
+    paranoid: true
 })
 
-Post.belongsTo(User, {
-    foreignKey: "userId"
-})
+Post.belongsTo(User)
 
 export default Post

@@ -7,7 +7,7 @@ const sequelize = new Sequelize({
     username: "postgres",
     password: "1234",
     database: "it_hillel_db",
-    logging: true
+    logging: false
 })
 
 try {
